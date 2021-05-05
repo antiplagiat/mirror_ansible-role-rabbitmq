@@ -1,27 +1,40 @@
-- name: Add an apt key by id for rabbitmq
+- name: Add an apt key for RabbitMQ repository
   apt_key:
-    url: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+    url: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
     state: present
 
-- name: Add apt repository for erlang
+- name: Add apt key for Erlang Solutions repository
+  apt_key:
+    url: https://packages.erlang-solutions.com/debian/erlang_solutions.asc
+    state: present
+
+- name: Add apt repository for Erlang
   apt_repository:
-    repo: "deb http://dl.bintray.com/rabbitmq-erlang/debian {{ ansible_distribution_release }} erlang-{{ erlang_version|default('22.x') }}"
+    repo: "deb https://packages.erlang-solutions.com/debian {{ ansible_distribution_release }} contrib"
     filename: rabbitmq_erlang
     update_cache: no
 
-- name: Set package erlang preference
+- name: Pin Erlang packages from the Erlang Solutions repository
   copy:
     dest: /etc/apt/preferences.d/erlang
     content: |
-      Package: erlang*
-      Pin: release o=Bintray
-      Pin-Priority: 1000
+      Package: *
+      Pin: release o=Erlang Solutions Ltd.
+      Pin-Priority: 999
 
 - name: Add apt repository for rabbitmq
   apt_repository:
-    repo: "deb https://dl.bintray.com/rabbitmq/debian {{ ansible_distribution_release }} main"
+    repo: "deb https://packagecloud.io/rabbitmq/rabbitmq-server/debian/ {{ ansible_distribution_release }} main"
     filename: rabbitmq_main
     update_cache: yes
+
+- name: Pin RabbitMQ package
+  copy:
+    dest: /etc/apt/preferences.d/rabbitmq
+    content: |
+      Package: rabbitmq-server
+      Pin: release o=packagecloud.io/rabbitmq/rabbitmq-server
+      Pin-Priority: 999
 
 - name: Install RabbitMQ
   apt:

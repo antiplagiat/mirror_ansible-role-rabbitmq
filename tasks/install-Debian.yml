@@ -5,12 +5,12 @@
 
 - name: Add apt key for Erlang Solutions repository
   apt_key:
-    url: https://packages.erlang-solutions.com/debian/erlang_solutions.asc
+    url: "https://packages.erlang-solutions.com/{{ ansible_distribution|lower }}/erlang_solutions.asc"
     state: present
 
 - name: Add apt repository for Erlang
   apt_repository:
-    repo: "deb https://packages.erlang-solutions.com/debian {{ ansible_distribution_release }} contrib"
+    repo: "deb https://packages.erlang-solutions.com/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} contrib"
     filename: rabbitmq_erlang
     update_cache: no
 
@@ -24,7 +24,7 @@
 
 - name: Add apt repository for rabbitmq
   apt_repository:
-    repo: "deb https://packagecloud.io/rabbitmq/rabbitmq-server/debian/ {{ ansible_distribution_release }} main"
+    repo: "deb https://packagecloud.io/rabbitmq/rabbitmq-server/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} main"
     filename: rabbitmq_main
     update_cache: yes
 

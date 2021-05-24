@@ -2,6 +2,7 @@
 - name: remove rabbitmq virtual hosts
   rabbitmq_vhost:
     name: "{{ item }}"
+    node: "{{ rabbitmq_node_name }}"
     state: absent
   with_items: "{{ rabbitmq_vhosts_absent }}"
 

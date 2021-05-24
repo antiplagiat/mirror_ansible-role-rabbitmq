@@ -19,6 +19,8 @@ rabbitmq_users_absent:
   - guest
 
 rabbitmq_version: '3.8.1'
+erlang_version: '23.1'
+rabbitmq_node_name: 'rabbit'
 rabbitmq_vhosts: []
 rabbitmq_vhosts_absent: []
 
